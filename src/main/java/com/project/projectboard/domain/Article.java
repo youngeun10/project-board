@@ -4,13 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -23,9 +16,8 @@ import java.util.Set;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class)  // auditing을 사용한다는 표시가 있어야한다.
 @Entity
-public class Article {
+public class Article extends AuditingFields{
     @Id     // 기본키 직접 할당
     @GeneratedValue(strategy = GenerationType.IDENTITY)       // (mysql => IDENTITY)자동으로 데이터 베이스가 생성하는 값을 설정
     private Long id;
@@ -43,12 +35,6 @@ public class Article {
     @ToString.Exclude
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
-    // metadata를 자동으로 설정해주는 기능: JPA의 auditing
-    @CreatedDate @Column(nullable = false) private LocalDateTime createdAt;        // 생성일시
-    @CreatedBy @Column(nullable = false, length = 100) private String createdBy;               // 수정자
-    @LastModifiedDate @Column(nullable = false) private LocalDateTime modifiedAt;       // 수정일시
-    @LastModifiedBy @Column(nullable = false, length = 100) private String modifiedBy;              // 수정자
-
     protected Article() {}
 
     private Article(String title, String content, String hashtag) {
@@ -64,7 +50,6 @@ public class Article {
     }
 
     // EqualsHashCode
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
