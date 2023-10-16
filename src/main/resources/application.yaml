@@ -21,3 +21,6 @@ spring:
       hibernate.format_sql: true
       hibernate.default_batch_fetch_size: 100
   sql.init.mode: always
+  data.rest:
+      base-path: /api
+      detection-strategy: annotated   # annotation 으로 명시 한 놈만 오픈하는 방식 채택 - https://docs.spring.io/spring-data/rest/docs/current/reference/html/#upgrading -> 3.5.1 항목
